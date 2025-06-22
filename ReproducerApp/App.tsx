@@ -1,20 +1,28 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
+function createBlockingDelay(milliseconds: number) {
+  return new Promise((resolve) => {
+    const startTime = Date.now();
+    while (Date.now() - startTime < milliseconds) {
+      // Busy-waiting loop to simulate synchronous delay
+    }
+    resolve(true);
+  });
+}
 
 function App() {
-  const isDarkMode = useColorScheme() === 'dark';
+  const [counter, setCounter] = useState(0);
+
+  useEffect(() => {
+    createBlockingDelay(1000).then(() => {
+      setCounter((previousCount) => previousCount + 1);
+    });
+  }, [counter]);
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <NewAppScreen templateFileName="App.tsx" />
+      <Text style={styles.counterText}>{counter}</Text>
     </View>
   );
 }
@@ -22,6 +30,11 @@ function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  counterText: {
+    fontSize: 50,
   },
 });
 
